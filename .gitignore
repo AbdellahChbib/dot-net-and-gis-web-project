@@ -1,0 +1,79 @@
+# === .NET / ASP.NET Core ===
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+*.vspscc
+*.vssscc
+*.dbmdl
+*.bak
+*.log
+*.pdb
+
+# Configuration
+appsettings.Development.json
+appsettings.*.json
+secrets.json
+
+# === Node / Frontend (si npm utilisé pour gérer les libs JS comme ArcGIS) ===
+node_modules/
+npm-debug.log
+yarn-error.log
+dist/
+build/
+
+# === Frontend Assets ===
+*.env
+*.map
+.cache/
+coverage/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# === QGIS Server & Carto ===
+.qgis/
+.qgz
+*.qgs~
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === Logs / Temporary Files ===
+*.log
+*.tmp
+*.temp
+
+# === OS Specific ===
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# === Visual Studio Specific ===
+.vs/
+*.dbmdl
+*.suo
+*.ntvs_analysis.dat
+*.njsproj.user
+*.tfignore
+
+# === PostGIS / PostgreSQL dumps ===
+*.sql
+*.backup
+
+# === Others ===
+*.swp
+*.swn
+*.swo
+*.sqlite
