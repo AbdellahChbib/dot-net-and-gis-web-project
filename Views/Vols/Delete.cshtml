@@ -1,0 +1,20 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Supprimer le vol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h4>Confirmer la suppression du vol suivant :</h4>
+<div>
+    <p><strong>@Model.NomVol</strong> – @Model.Depart → @Model.Destination</p>
+    <p>Places max : @Model.NbPlacesMax</p>
+    <p>Prix : @Model.Prix MAD</p>
+</div>
+
+<form asp-action="DeleteConfirmed">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirmer</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>

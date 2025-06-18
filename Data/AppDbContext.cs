@@ -3,55 +3,70 @@ using System.Collections.Generic;
 using GisServerProject.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace GisServerProject.Data;
-
-public partial class AppDbContext : DbContext
+namespace GisServerProject.Data
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+    public partial class AppDbContext : DbContext
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options)
+        {
+        }
+
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Gestionnaire> Gestionnaires { get; set; }
+        public virtual DbSet<Reservation> Reservations { get; set; }
+        public virtual DbSet<Vol> Vols { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasPostgresExtension("postgis");
+
+            modelBuilder.Entity<Client>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("clients_pkey");
+            });
+
+            modelBuilder.Entity<Gestionnaire>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("gestionnaires_pkey");
+            });
+
+            modelBuilder.Entity<Reservation>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("reservations_pkey");
+
+                entity.Property(e => e.DateReservation).HasDefaultValueSql("now()");
+
+                entity.HasOne(d => d.Client)
+                    .WithMany(p => p.Reservations)
+                    .HasForeignKey(d => d.ClientId)
+                    .HasConstraintName("reservations_client_id_fkey");
+
+                entity.HasOne(d => d.Vol)
+                    .WithMany(p => p.Reservations)
+                    .HasForeignKey(d => d.VolId)
+                    .HasConstraintName("reservations_vol_id_fkey");
+            });
+
+            modelBuilder.Entity<Vol>(entity =>
+{
+    entity.ToTable("vols");
+
+    entity.HasKey(e => e.Id).HasName("vols_pkey");
+
+    entity.Property(e => e.Id).HasColumnName("id");
+    entity.Property(e => e.NomVol).HasColumnName("nom_vol");
+    entity.Property(e => e.NbPlacesMax).HasColumnName("nb_places_max");
+    entity.Property(e => e.Destination).HasColumnName("destination");
+    entity.Property(e => e.Depart).HasColumnName("depart");
+    entity.Property(e => e.Prix).HasColumnName("prix");
+    entity.Property(e => e.Geom).HasColumnName("geom");
+});
+
+
+            OnModelCreatingPartial(modelBuilder);
+        }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
-    public virtual DbSet<client> clients { get; set; }
-
-    public virtual DbSet<gestionnaire> gestionnaires { get; set; }
-
-    public virtual DbSet<reservation> reservations { get; set; }
-
-    public virtual DbSet<vol> vols { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.HasPostgresExtension("postgis");
-
-        modelBuilder.Entity<client>(entity =>
-        {
-            entity.HasKey(e => e.id).HasName("clients_pkey");
-        });
-
-        modelBuilder.Entity<gestionnaire>(entity =>
-        {
-            entity.HasKey(e => e.id).HasName("gestionnaires_pkey");
-        });
-
-        modelBuilder.Entity<reservation>(entity =>
-        {
-            entity.HasKey(e => e.id).HasName("reservations_pkey");
-
-            entity.Property(e => e.date_reservation).HasDefaultValueSql("now()");
-
-            entity.HasOne(d => d.client).WithMany(p => p.reservations).HasConstraintName("reservations_client_id_fkey");
-
-            entity.HasOne(d => d.vol).WithMany(p => p.reservations).HasConstraintName("reservations_vol_id_fkey");
-        });
-
-        modelBuilder.Entity<vol>(entity =>
-        {
-            entity.HasKey(e => e.id).HasName("vols_pkey");
-        });
-
-        OnModelCreatingPartial(modelBuilder);
-    }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

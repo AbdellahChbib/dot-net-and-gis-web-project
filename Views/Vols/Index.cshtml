@@ -1,0 +1,66 @@
+@model IEnumerable<GisServerProject.Models.Vol>
+
+@{
+    ViewData["Title"] = "Vols - Carte et liste";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div id="viewDiv" style="height: 600px; width: 100%; margin-bottom: 2rem;"></div>
+
+<!-- Liste des vols -->
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Nom Vol</th>
+            <th>Départ</th>
+            <th>Destination</th>
+            <th>Prix</th>
+            <th>Places max</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vol in Model)
+        {
+            <tr>
+                <td>@vol.NomVol</td>
+                <td>@vol.Depart</td>
+                <td>@vol.Destination</td>
+                <td>@vol.Prix €</td>
+                <td>@vol.NbPlacesMax</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/GeoJSONLayer"
+        ], function (Map, MapView, GeoJSONLayer) {
+            const map = new Map({
+                basemap: "streets-navigation-vector"
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [-6.85, 33.97], // Rabat
+                zoom: 8
+            });
+
+            const geojsonUrl = '/Vols/GeoJson';
+
+            const geojsonLayer = new GeoJSONLayer({
+                url: geojsonUrl
+            });
+
+            map.add(geojsonLayer);
+        });
+    </script>
+}

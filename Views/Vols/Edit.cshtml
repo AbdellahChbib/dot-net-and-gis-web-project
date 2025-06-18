@@ -1,0 +1,34 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Modifier le vol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="NomVol"></label>
+        <input asp-for="NomVol" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Depart"></label>
+        <input asp-for="Depart" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Destination"></label>
+        <input asp-for="Destination" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="NbPlacesMax"></label>
+        <input asp-for="NbPlacesMax" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Prix"></label>
+        <input asp-for="Prix" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Sauvegarder</button>
+    <a asp-action="Index" class="btn btn-secondary">Annuler</a>
+</form>

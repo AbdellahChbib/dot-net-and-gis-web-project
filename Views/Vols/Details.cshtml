@@ -1,0 +1,32 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Détails du vol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <h4>Vol</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">Nom</dt>
+        <dd class="col-sm-9">@Model.NomVol</dd>
+
+        <dt class="col-sm-3">Départ</dt>
+        <dd class="col-sm-9">@Model.Depart</dd>
+
+        <dt class="col-sm-3">Destination</dt>
+        <dd class="col-sm-9">@Model.Destination</dd>
+
+        <dt class="col-sm-3">Places max</dt>
+        <dd class="col-sm-9">@Model.NbPlacesMax</dd>
+
+        <dt class="col-sm-3">Prix</dt>
+        <dd class="col-sm-9">@Model.Prix MAD</dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Modifier</a>
+    <a asp-action="Index" class="btn btn-secondary">Retour</a>
+</div>
