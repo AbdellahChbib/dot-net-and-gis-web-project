@@ -19,48 +19,95 @@
             <th>Places max</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var vol in Model)
-        {
-            <tr>
-                <td>@vol.NomVol</td>
-                <td>@vol.Depart</td>
-                <td>@vol.Destination</td>
-                <td>@vol.Prix €</td>
-                <td>@vol.NbPlacesMax</td>
-            </tr>
-        }
-    </tbody>
+<tbody>
+@foreach (var vol in Model)
+{
+    var coords = vol.Geom?.Coordinates?.Select(c => $"{c.X},{c.Y}").ToArray();
+    var coordString = coords != null ? string.Join(";", coords) : "";
+
+    <tr>
+        <td>@vol.NomVol</td>
+        <td>@vol.Depart</td>
+        <td>@vol.Destination</td>
+        <td>@vol.Prix €</td>
+        <td>@vol.NbPlacesMax</td>
+        <td>
+            <button class="btn btn-primary btn-sm show-on-map" data-coords="@coordString">
+                Afficher sur la carte
+            </button>
+        </td>
+    </tr>
+}
+</tbody>
+
+
 </table>
 
 @section Scripts {
     <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.29/"></script>
 
-    <script>
-        require([
-            "esri/Map",
-            "esri/views/MapView",
-            "esri/layers/GeoJSONLayer"
-        ], function (Map, MapView, GeoJSONLayer) {
-            const map = new Map({
-                basemap: "streets-navigation-vector"
-            });
-
-            const view = new MapView({
-                container: "viewDiv",
-                map: map,
-                center: [-6.85, 33.97], // Rabat
-                zoom: 8
-            });
-
-            const geojsonUrl = '/Vols/GeoJson';
-
-            const geojsonLayer = new GeoJSONLayer({
-                url: geojsonUrl
-            });
-
-            map.add(geojsonLayer);
+<script>
+    require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/GeoJSONLayer",
+        "esri/geometry/Polyline"
+    ], function (Map, MapView, GeoJSONLayer, Polyline) {
+        const map = new Map({
+            basemap: "streets-navigation-vector"
         });
-    </script>
+
+        const view = new MapView({
+            container: "viewDiv",
+            map: map,
+            center: [-6.85, 33.97],
+            zoom: 7
+        });
+
+        const geojsonLayer = new GeoJSONLayer({
+            url: "/Vols/GeoJson"
+        });
+        map.add(geojsonLayer);
+
+        document.querySelectorAll('.show-on-map').forEach(button => {
+            button.addEventListener('click', function () {
+                const coordsAttr = this.dataset.coords;
+                if (!coordsAttr) return;
+
+                const coordPairs = coordsAttr.split(";").map(pair => {
+                    const [x, y] = pair.split(",");
+                    return [parseFloat(x), parseFloat(y)];
+                });
+
+                const xSum = coordPairs.reduce((acc, val) => acc + val[0], 0);
+                const ySum = coordPairs.reduce((acc, val) => acc + val[1], 0);
+                const centerX = xSum / coordPairs.length;
+                const centerY = ySum / coordPairs.length;
+
+                view.goTo({
+                    center: [centerX, centerY],
+                    zoom: 10
+                });
+
+                const polyline = new Polyline({
+                    paths: [coordPairs],
+                    spatialReference: { wkid: 4326 }
+                });
+
+                view.graphics.removeAll();
+                view.graphics.add({
+                    geometry: polyline,
+                    symbol: {
+                        type: "simple-line",
+                        color: [255, 0, 0],
+                        width: 3
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
 }
