@@ -1,0 +1,38 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Créer un Vol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="NomVol"></label>
+        <input asp-for="NomVol" class="form-control" />
+        <span asp-validation-for="NomVol" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="NbPlacesMax"></label>
+        <input asp-for="NbPlacesMax" class="form-control" />
+        <span asp-validation-for="NbPlacesMax" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Destination"></label>
+        <input asp-for="Destination" class="form-control" />
+        <span asp-validation-for="Destination" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Depart"></label>
+        <input asp-for="Depart" class="form-control" />
+        <span asp-validation-for="Depart" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Prix"></label>
+        <input asp-for="Prix" class="form-control" />
+        <span asp-validation-for="Prix" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Créer</button>
+</form>
+
+<a asp-action="Vols">Retour à la liste</a>

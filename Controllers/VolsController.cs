@@ -61,6 +61,47 @@ public async Task<IActionResult> GeoJson()
     return Json(geoJson);
 }
 
+[HttpGet]
+public async Task<IActionResult> FilteredGeoJson(string? depart, string? destination, int? nbPlacesMin, decimal? prixMax)
+{
+    var query = _context.Vols.AsQueryable();
+
+    if (!string.IsNullOrEmpty(depart))
+        query = query.Where(v => v.Depart != null && v.Depart.ToLower().Contains(depart.ToLower()));
+
+    if (!string.IsNullOrEmpty(destination))
+        query = query.Where(v => v.Destination != null && v.Destination.ToLower().Contains(destination.ToLower()));
+
+    if (nbPlacesMin.HasValue)
+        query = query.Where(v => v.NbPlacesMax >= nbPlacesMin.Value);
+
+    if (prixMax.HasValue)
+        query = query.Where(v => v.Prix <= prixMax.Value);
+
+    var vols = await query.ToListAsync();
+
+    var features = vols.Where(v => v.Geom != null).Select(v => new
+    {
+        type = "Feature",
+        geometry = new
+        {
+            type = "LineString",
+            coordinates = v.Geom.Coordinates.Select(c => new[] { c.X, c.Y })
+        },
+        properties = new
+        {
+            nom = v.NomVol,
+            depart = v.Depart,
+            destination = v.Destination,
+            prix = v.Prix,
+            nbPlaces = v.NbPlacesMax
+        }
+    }).ToList();
+
+    return Json(new { type = "FeatureCollection", features });
+}
+
+
 
         // Tu pourras ajouter Create, Edit, Delete, Details ici plus tard
     }

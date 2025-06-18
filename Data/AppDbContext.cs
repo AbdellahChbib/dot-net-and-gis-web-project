@@ -21,18 +21,24 @@ namespace GisServerProject.Data
         {
             modelBuilder.HasPostgresExtension("postgis");
 
+            // ✅ Configuration explicite des noms de tables (correspondant à PostgreSQL)
+
             modelBuilder.Entity<Client>(entity =>
             {
+                entity.ToTable("clients");
                 entity.HasKey(e => e.Id).HasName("clients_pkey");
             });
 
             modelBuilder.Entity<Gestionnaire>(entity =>
             {
+                entity.ToTable("gestionnaires");
                 entity.HasKey(e => e.Id).HasName("gestionnaires_pkey");
             });
 
             modelBuilder.Entity<Reservation>(entity =>
             {
+                entity.ToTable("reservations");
+
                 entity.HasKey(e => e.Id).HasName("reservations_pkey");
 
                 entity.Property(e => e.DateReservation).HasDefaultValueSql("now()");
@@ -49,20 +55,19 @@ namespace GisServerProject.Data
             });
 
             modelBuilder.Entity<Vol>(entity =>
-{
-    entity.ToTable("vols");
+            {
+                entity.ToTable("vols");
 
-    entity.HasKey(e => e.Id).HasName("vols_pkey");
+                entity.HasKey(e => e.Id).HasName("vols_pkey");
 
-    entity.Property(e => e.Id).HasColumnName("id");
-    entity.Property(e => e.NomVol).HasColumnName("nom_vol");
-    entity.Property(e => e.NbPlacesMax).HasColumnName("nb_places_max");
-    entity.Property(e => e.Destination).HasColumnName("destination");
-    entity.Property(e => e.Depart).HasColumnName("depart");
-    entity.Property(e => e.Prix).HasColumnName("prix");
-    entity.Property(e => e.Geom).HasColumnName("geom");
-});
-
+                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.NomVol).HasColumnName("nom_vol");
+                entity.Property(e => e.NbPlacesMax).HasColumnName("nb_places_max");
+                entity.Property(e => e.Destination).HasColumnName("destination");
+                entity.Property(e => e.Depart).HasColumnName("depart");
+                entity.Property(e => e.Prix).HasColumnName("prix");
+                entity.Property(e => e.Geom).HasColumnName("geom");
+            });
 
             OnModelCreatingPartial(modelBuilder);
         }

@@ -1,0 +1,41 @@
+@model IEnumerable<GisServerProject.Models.Vol>
+
+@{
+    ViewData["Title"] = "Gestion des Vols";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">Ajouter un vol</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nom Vol</th>
+            <th>Départ</th>
+            <th>Destination</th>
+            <th>Prix</th>
+            <th>Places max</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var vol in Model)
+{
+        <tr>
+            <td>@vol.NomVol</td>
+            <td>@vol.Depart</td>
+            <td>@vol.Destination</td>
+            <td>@vol.Prix €</td>
+            <td>@vol.NbPlacesMax</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@vol.Id" class="btn btn-info btn-sm">Détails</a>
+                <a asp-action="Edit" asp-route-id="@vol.Id" class="btn btn-primary btn-sm">Modifier</a>
+                <a asp-action="Delete" asp-route-id="@vol.Id" class="btn btn-danger btn-sm">Supprimer</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

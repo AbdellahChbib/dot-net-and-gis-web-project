@@ -1,0 +1,73 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Détails du vol";
+}
+
+<h2>@Model.NomVol</h2>
+
+<p><strong>Départ :</strong> @Model.Depart</p>
+<p><strong>Destination :</strong> @Model.Destination</p>
+<p><strong>Prix :</strong> @Model.Prix €</p>
+<p><strong>Places max :</strong> @Model.NbPlacesMax</p>
+
+<p>
+    <strong>Places disponibles :</strong> 
+    @(Model.NbPlacesMax - Model.Reservations.Count(r => r.Statut == "confirmée"))
+</p>
+
+<h3>Réservations</h3>
+
+@if (!Model.Reservations.Any())
+{
+    <p>Aucune réservation pour ce vol.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var res in Model.Reservations)
+        {
+            <tr>
+                <td>@res.Client.Prenom @res.Client.Nom</td>
+                <td>@res.Statut</td>
+                <td>
+                    @if (res.Statut != "confirmée")
+                    {
+                        <form asp-action="Confirmer" method="post" style="display:inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@res.Id" />
+                            <button type="submit" class="btn btn-success btn-sm" 
+                                    onclick="return confirm('Confirmer cette réservation ?');">
+                                Confirmer
+                            </button>
+                        </form>
+                    }
+                    @if (res.Statut != "annulée")
+                    {
+                        <form asp-action="Annuler" method="post" style="display:inline; margin-left: 5px;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@res.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm" 
+                                    onclick="return confirm('Annuler cette réservation ?');">
+                                Annuler
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+<p>
+    <a asp-action="Vols" class="btn btn-secondary">Retour à la liste</a>
+</p>

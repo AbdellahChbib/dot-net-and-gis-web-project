@@ -1,0 +1,51 @@
+@model GisServerProject.Models.Vol
+
+@{
+    ViewData["Title"] = "Modifier le Vol";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="NomVol" class="control-label"></label>
+        <input asp-for="NomVol" class="form-control" />
+        <span asp-validation-for="NomVol" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Depart" class="control-label"></label>
+        <input asp-for="Depart" class="form-control" />
+        <span asp-validation-for="Depart" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Destination" class="control-label"></label>
+        <input asp-for="Destination" class="form-control" />
+        <span asp-validation-for="Destination" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Prix" class="control-label"></label>
+        <input asp-for="Prix" class="form-control" />
+        <span asp-validation-for="Prix" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NbPlacesMax" class="control-label"></label>
+        <input asp-for="NbPlacesMax" class="form-control" />
+        <span asp-validation-for="NbPlacesMax" class="text-danger"></span>
+    </div>
+
+    <!-- Si tu veux modifier Geom manuellement -->
+    <div class="form-group">
+        <label asp-for="Geom" class="control-label"></label>
+        <input asp-for="Geom" class="form-control" />
+        <span asp-validation-for="Geom" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a asp-action="Vols" class="btn btn-secondary">Annuler</a>
+</form>

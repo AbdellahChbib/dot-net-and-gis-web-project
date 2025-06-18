@@ -1,24 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
-using NetTopologySuite.Geometries;
 
 namespace GisServerProject.Models;
 
+[Table("reservations")]
 public partial class Reservation
 {
     [Key]
+    [Column("id")]
     public int Id { get; set; }
 
+    [Column("client_id")]
     public int ClientId { get; set; }
 
+    [Column("vol_id")]
     public int VolId { get; set; }
 
-    [Column(TypeName = "timestamp without time zone")]
+    [Column("date_reservation", TypeName = "timestamp without time zone")]
     public DateTime DateReservation { get; set; }
 
+    [Column("statut")]
     [StringLength(20)]
     public string Statut { get; set; } = null!;
 
