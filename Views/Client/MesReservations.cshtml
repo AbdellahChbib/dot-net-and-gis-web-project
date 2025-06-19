@@ -1,0 +1,75 @@
+@model IEnumerable<GisServerProject.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Mes réservations";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        Vous n'avez effectué aucune réservation pour le moment.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Vol</th>
+                <th>Départ</th>
+                <th>Destination</th>
+                <th>Date réservation</th>
+                <th>Statut</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var res in Model)
+        {
+            <tr>
+                <td>@res.Vol?.NomVol</td>
+                <td>@res.Vol?.Depart</td>
+                <td>@res.Vol?.Destination</td>
+                <td>@res.DateReservation.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    @if (res.Statut == "en attente")
+                    {
+                        <span class="badge bg-warning text-dark">En attente</span>
+                    }
+                    else if (res.Statut == "confirmée")
+                    {
+                        <span class="badge bg-success">Confirmée</span>
+                    }
+                    else if (res.Statut == "annulée")
+                    {
+                        <span class="badge bg-danger">Annulée</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">@res.Statut</span>
+                    }
+                </td>
+                <td>
+                    @if (res.Statut != "annulée")
+                    {
+                        <form asp-action="Annuler" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@res.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('Confirmer l\'annulation de cette réservation ?')">
+                                Annuler
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <em>Action non disponible</em>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

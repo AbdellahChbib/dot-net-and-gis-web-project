@@ -1,57 +1,367 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GisServerProject</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GisServerProject.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            color: #1a73e8 !important;
+            font-size: 1.25rem;
+        }
+
+        .nav-link {
+            transition: color 0.2s ease-in-out;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link:hover {
+            color: #1a73e8 !important;
+        }
+
+        .nav-item.active .nav-link {
+            color: #1a73e8 !important;
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            padding: 1.5rem 0;
+            margin-top: auto;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0077b6, #00b4d8);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 20px rgba(0, 180, 216, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: #1a73e8;
+            border-color: #1a73e8;
+            padding: 0.5rem 1.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #155ab6;
+            border-color: #155ab6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+        }
+
+        .card {
+            border: none;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #1a73e8;
+            color: white;
+            border-radius: 0.75rem 0.75rem 0 0 !important;
+            font-weight: 600;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
+
+        .map-container {
+            height: 500px;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            width: 300px;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+    </style>
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GisServerProject</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-globe-americas me-2"></i> GisServerProject
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door-fill me-1"></i> Accueil
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-controller="Vols" asp-action="Index">
+                                <i class="bi bi-map-fill me-1"></i> Vols
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Vols" asp-action="Index">Vols</a>
+                            <a class="nav-link" asp-controller="Reservations" asp-action="Index">
+                                <i class="bi bi-ticket-perforated-fill me-1"></i> Mes réservations
+                            </a>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                                <i class="bi bi-shield-lock-fill me-1"></i> Confidentialité
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-3">
+                            <a class="btn btn-primary rounded-pill px-3" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Connexion
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+
+    <div class="container my-4">
+        @* Section Héro si c'est la page d'accueil *@
+        @if (ViewData["Title"]?.ToString()?.Contains("Accueil") ?? false)
+        {
+            <div class="hero">
+                <div class="container">
+                    <h1>Bienvenue sur la plateforme de visualisation géospatiale</h1>
+                    <p class="lead">Consultez, filtrez et explorez les itinéraires de vols en temps réel avec notre système avancé de cartographie.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="@Url.Action("Index", "Vols")" class="btn btn-light btn-lg rounded-pill px-4">
+                            <i class="bi bi-arrow-right-circle me-2"></i> Explorer les vols
+                        </a>
+                        <a href="@Url.Action("Create", "Reservations")" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                            <i class="bi bi-plus-circle me-2"></i> Nouvelle réservation
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="stat-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-airplane"></i>
+                        </div>
+                        <div class="stat-number">1,248</div>
+                        <div class="stat-label">Vols disponibles</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="stat-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-globe2"></i>
+                        </div>
+                        <div class="stat-number">78</div>
+                        <div class="stat-label">Destinations</div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="stat-card h-100">
+                        <div class="feature-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <div class="stat-number">24,593</div>
+                        <div class="stat-label">Clients satisfaits</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>
+                            <span>Derniers vols ajoutés</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Paris (CDG) → New York (JFK)</h6>
+                                        <small class="text-muted">Départ: 15 Nov 2023, 08:30</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">12 places</span>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Lyon (LYS) → Londres (LHR)</h6>
+                                        <small class="text-muted">Départ: 16 Nov 2023, 14:15</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">8 places</span>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-1">Marseille (MRS) → Casablanca (CMN)</h6>
+                                        <small class="text-muted">Départ: 17 Nov 2023, 10:45</small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">5 places</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center">
+                            <i class="bi bi-map-fill me-2"></i>
+                            <span>Carte interactive</span>
+                        </div>
+                        <div class="card-body p-0 position-relative">
+                            <div class="map-container" id="mainMap"></div>
+                            <div class="search-box">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Rechercher un vol...">
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="bi bi-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <main role="main" class="pb-4">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - GisServerProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h5 class="mb-3"><i class="bi bi-globe-americas me-2"></i> GisServerProject</h5>
+                    <p class="text-muted">Plateforme avancée de visualisation et réservation de vols avec technologie géospatiale.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-muted"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-muted"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                    <h5 class="mb-3">Navigation</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted">Accueil</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Vols</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Réservations</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Destinations</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4 mb-md-0">
+                    <h5 class="mb-3">Aide</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-muted">FAQ</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Contact</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Support</a></li>
+                        <li class="mb-2"><a href="#" class="text-muted">Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="mb-3">Newsletter</h5>
+                    <p class="text-muted mb-3">Abonnez-vous pour recevoir nos offres spéciales.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Votre email">
+                        <button class="btn btn-primary" type="button">
+                            <i class="bi bi-envelope-fill"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center text-muted">
+                &copy; 2025 <strong>GisServerProject</strong> | Développé par Abdellah Chbib |
+                <a asp-controller="Home" asp-action="Privacy">Politique de confidentialité</a>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

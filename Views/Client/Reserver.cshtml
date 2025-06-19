@@ -1,0 +1,29 @@
+@model GisServerProject.ViewModels.ClientReservationViewModel
+
+@{
+    ViewData["Title"] = "Réserver un vol";
+}
+
+<h2>Réserver le vol @Model.Vol?.NomVol</h2>
+
+<div class="mb-3">
+    <p><strong>Places disponibles :</strong> @Model.PlacesDisponibles</p>
+</div>
+
+<form asp-action="Reserver" method="post">
+    <input type="hidden" asp-for="Vol.Id" />
+    <input type="hidden" asp-for="ClientId" />
+
+    <div class="mb-3">
+        <label asp-for="NombrePlacesReservees" class="form-label">Nombre de places</label>
+        <input asp-for="NombrePlacesReservees" class="form-control" type="number" min="1" max="@Model.PlacesDisponibles" />
+        <span asp-validation-for="NombrePlacesReservees" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Réserver</button>
+    <a asp-action="Vols" class="btn btn-secondary">Retour</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -32,4 +32,8 @@ public partial class Reservation
     [ForeignKey(nameof(VolId))]
     [InverseProperty(nameof(Vol.Reservations))]
     public virtual Vol Vol { get; set; } = null!;
+
+    [Column("nombre_places")]
+public int NombrePlaces { get; set; }
+
 }
